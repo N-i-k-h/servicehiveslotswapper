@@ -1,7 +1,10 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// ✅ Automatically use Render backend in production, localhost in dev
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://servicehiveslotswapper-backend1.onrender.com/api";
 
 function getHeaders(token) {
-  const headers = { 'Content-Type': 'application/json' };
+  const headers = { "Content-Type": "application/json" };
   if (token) headers.Authorization = `Bearer ${token}`;
   return headers;
 }
@@ -16,8 +19,8 @@ async function handle(res) {
       throw new Error(text || res.statusText);
     }
   }
-  const t = res.headers.get('content-type') || '';
-  if (t.includes('application/json')) return res.json();
+  const contentType = res.headers.get("content-type") || "";
+  if (contentType.includes("application/json")) return res.json();
   return res.text();
 }
 
@@ -28,22 +31,25 @@ export const api = {
   },
   async post(path, body, token) {
     const res = await fetch(`${API_URL}${path}`, {
-      method: 'POST',
+      method: "POST",
       headers: getHeaders(token),
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     });
     return handle(res);
   },
   async put(path, body, token) {
     const res = await fetch(`${API_URL}${path}`, {
-      method: 'PUT',
+      method: "PUT",
       headers: getHeaders(token),
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
     });
     return handle(res);
   },
   async del(path, token) {
-    const res = await fetch(`${API_URL}${path}`, { method: 'DELETE', headers: getHeaders(token) });
+    const res = await fetch(`${API_URL}${path}`, {
+      method: "DELETE",
+      headers: getHeaders(token),
+    });
     return handle(res);
-  }
+  },
 };
