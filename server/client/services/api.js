@@ -1,7 +1,9 @@
-// ✅ Automatically use Render backend in production, localhost in dev
+// ✅ Dynamic API base URL handling
+// Uses the same domain when deployed on Render (since frontend + backend are in one service)
 const API_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://servicehiveslotswapper-backend1.onrender.com/api";
+  import.meta.env.PROD
+    ? "/api" // in Render, backend and frontend share the same domain
+    : import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 function getHeaders(token) {
   const headers = { "Content-Type": "application/json" };
